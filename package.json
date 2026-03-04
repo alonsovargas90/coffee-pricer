@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest",
     "typecheck": "tsc --noEmit"
-  },
+  }, 
   "type": "module",
   "keywords": [],
   "author": "",
