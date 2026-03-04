@@ -1,5 +1,12 @@
-import { Category, Price, Option, SizeEnum, CreamerEnum } from "@types"
-
+import {  Category,
+  Option,
+  Size,
+  Creamer,
+  Price, } from "@types"
+import {
+  SIZE_PRICES,
+  CREAMER_PRICES,
+} from './constants';
 
 export interface Pricer {
 /**
@@ -17,42 +24,28 @@ selections made
 */
 
 type PricerState = Readonly<{
-  size: SizeEnum;
-  creamer: CreamerEnum;
+  size: Size;
+  creamer: Creamer;
 }>;
 
 /* Based on the test cases  */
 const DEFAULT_STATE: PricerState = {
-  size: SizeEnum.Small,
-  creamer: CreamerEnum.None,
+  size: 'small',
+  creamer: 'none',
 };
 
 export const createPricer = (): Pricer => {
-    /* Prices Records to match each type to the price */
-    /* 
-        Normally We should have this type of Data on its own file since we can have a lot more data and growing complexity 
-        But since its just a simple example i will leave it here with that note in mind cause its only used on this context for now
-    */
-    const sizePrices: Readonly<Record<SizeEnum, number>> = {
-        [SizeEnum.Small]: 1.0,
-        [SizeEnum.Medium]: 1.5,
-        [SizeEnum.Large]: 2.0,
-    }
-    const creamerPrices: Readonly<Record<CreamerEnum, number>> = {
-        [CreamerEnum.None]: 0,
-        [CreamerEnum.Dairy]: 0.25,
-        [CreamerEnum.NonDairy]: 0.5,
-    }
     let state: PricerState = DEFAULT_STATE;
 
     return (category: Category, option: Option): Price => {
         //Inmutable state
         state = category === 'size'
-            ? { ...state, size: option as SizeEnum}
-            : { ...state, creamer: option as CreamerEnum};
+            ? { ...state, size: option as Size}
+            : { ...state, creamer: option as Creamer};
 
-        const sizePrice = sizePrices[state.size];
-        const creamerPrice = creamerPrices[state.creamer];
-        return sizePrice + creamerPrice;
+        return (
+            SIZE_PRICES[state.size] +
+            CREAMER_PRICES[state.creamer]
+        );
     }
 }
