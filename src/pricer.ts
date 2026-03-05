@@ -16,7 +16,9 @@ before this function is invoked.
 * @returns the _total_ price of the coffee so far given all the
 selections made
 */
-(category: Category, option: Option): Price
+// I refactor the signature as well to enforce correct category-option type calling 
+(category: 'size', option: Size): Price;
+(category: 'creamer', option: Creamer): Price; 
 }
 
 /**
@@ -29,10 +31,10 @@ type PricerState = Readonly<{
 }>;
 
 /* Based on the test cases  */
-const DEFAULT_STATE: PricerState = {
+const DEFAULT_STATE = {
   size: 'small',
   creamer: 'none',
-};
+} as const satisfies PricerState;
 
 export const createPricer = (): Pricer => {
     let state: PricerState = DEFAULT_STATE;
